@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 # respon = requests.Session()
 def login():
     print('test login')
-    urls = "https://www.yelp.com/search?cflt=contractors&find_loc=St%20Francis%20Wood%2C%20San%20Francisco%2C%20CA&start=0"
+    urls = "https://www.yelp.com/search?cflt=contractors&find_loc=St%20Francis%20Wood%2C%20San%20Francisco%2C%20CA&start"
     headers = {
         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
         'accept-encoding': 'gzip, deflate, br',
@@ -21,19 +21,25 @@ def login():
     soup = BeautifulSoup(respon.text, 'html5lib')
 
     page_item = soup.find_all('div', attrs={'class': 'pagination-link-container__09f24__13AN7'})
-    total_page = len(page_item)
+    # total_page = len(page_item)
+
+    paginition = '1 of 12'
+    total_page = paginition.split('of')[1]
+    total_page = int(total_page)
+    print(total_page)
+
 
     print(len(page_item))
 
     return total_page
 
 def get_url(page):
-    print('test url ...')
+    print('test url ... page {}'.format(page))
     params = {
         'start': page
     }
 
-    respon = requests.get('https://www.yelp.com/search?cflt=contractors&find_loc=St%20Francis%20Wood%2C%20San%20Francisco%2C%20CA&start=0', params=params)
+    respon = requests.get('https://www.yelp.com/search?cflt=contractors&find_loc=St%20Francis%20Wood%2C%20San%20Francisco%2C%20CA&start', params=params)
     
 
     suop = BeautifulSoup(respon.text, 'html5lib')
@@ -44,7 +50,8 @@ def get_url(page):
     urls = []
     for title in titles:
         url = title.find('a')['href']
-        urls.append(url)
+        # urls.append(url)
+        print(url)
         # print(url)
     # print(urls)
     # print(suop)
